@@ -29,7 +29,7 @@ export const toggleLikeCreation = async (req, res) => {
     const { userId } = req.auth();
     const { id } = req.body;
 
-    const [creation] = await sql`SELECT * FROM creation WHERE id = ${id}`;
+    const [creation] = await sql`SELECT * FROM creations WHERE id = ${id}`;
 
     if (!creation) {
       return res.json({ success: false, message: "Creation not found" });
@@ -50,10 +50,15 @@ export const toggleLikeCreation = async (req, res) => {
 
     const formattedArray = `{${updatedLikes.join(",")}}`;
 
-    await sql`UPDATE creations SET likes = ${formattedArray} :: text[] WHERE id = ${id}`;
+    const updatedCreation =
+      await sql`UPDATE creations SET likes = ${formattedArray} :: text[] WHERE id = ${id}`;
 
-    return res.json({ success: true, creations });
+    return res.json({
+      success: true,
+      message,
+      creations: updatedCreation,
+    });
   } catch (error) {
-    return res.json({ success: false, message: errror.message });
+    return res.json({ success: false, message: error.message });
   }
 };
