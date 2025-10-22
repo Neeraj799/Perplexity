@@ -11,13 +11,7 @@ const app = express();
 
 await connectCloudianry();
 
-app.use(
-  cors({
-    origin: "https://perplexity-git-main-neeraj799s-projects.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(clerkMiddleware());
 
